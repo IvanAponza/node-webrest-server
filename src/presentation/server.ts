@@ -1,8 +1,9 @@
-import express from 'express';
+import express, { Router } from 'express';
 import path from 'path';
 
 interface Options{
     port: number;
+    routes: Router;
     public_path?: string;
 }
 
@@ -13,22 +14,30 @@ export class Server {
 
     private readonly port: number;
     private readonly public_path: string;
+    private readonly routes: Router;
 
     constructor(option: Options){
-        const { port, public_path = 'public'} = option;
+        const { port, routes, public_path = 'public'} = option;
 
         this.port = port;
         this.public_path = public_path;
+        this.routes = routes;
     }
 
     async start(){
 
 
         //*Middleware 
-
+        this.app.use(express.json());
+        this.app.use(express.urlencoded({extended: true}));
+        //Dir Public
         this.app.use(express.static(this.public_path));
 
-        //comodin para servir get que no estan en public
+
+        //Routes
+        this.app.use(this.routes);
+
+        //comodin para servir get que no estan en public SPA
         this.app.get('*', (req, res) => {
             const indexPath = path.join(__dirname + `../../../${this.public_path}/index.html`);
             res.sendFile(indexPath);
