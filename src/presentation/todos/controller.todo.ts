@@ -16,7 +16,6 @@ export class TodoController {
 
         const id = +req.params.id;
         if (isNaN(id)) return res.status(400).json({ error: 'ID argument is not number' });
-
         const todo = await prisma.todo.findFirst({ where: { id } });
         (todo) ? res.json(todo) : res.status(404).json({ error: `Todo with id ${id} not found` })
     };
@@ -80,10 +79,7 @@ export class TodoController {
         if (!todo) return res.status(404).json({ error: `Todo with id ${id} not found` })
 
         const deleted = await prisma.todo.delete({ where: { id } });
-
-        ( deleted ) 
-        ? res.json(deleted) 
-        : res.status(400).json({error: `Todo with id ${id} not found` });
+        ( deleted ) ? res.json(deleted) : res.status(400).json({error: `Todo with id ${id} not found` });
     }
 
 }
