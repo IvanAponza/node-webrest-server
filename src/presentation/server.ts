@@ -28,8 +28,8 @@ export class Server {
 
 
         //*Middleware 
-        this.app.use(express.json());
-        this.app.use(express.urlencoded({extended: true}));
+        this.app.use(express.json()); //envio info form json
+        this.app.use(express.urlencoded({extended: true}));//envio info x-www-for
         //Dir Public
         this.app.use(express.static(this.public_path));
 
